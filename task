@@ -1,0 +1,43 @@
+#include "shell.h"
+
+/* 
+ * check_path - Checks if the command executable exists in the specified paths
+ * @paths: The array of paths to search in
+ * @input: The command to check for
+ *
+ * Return: The full path to the command executable if found, otherwise NULL
+ */
+char *check_path(char **paths, char *input)
+{
+    char *path_cmd = NULL;
+    int j;
+
+    if ((input[0] == '.' || input[0] == '/') && access(input, F_OK | X_OK) == 0)
+        return strdup(input);
+
+    if (!paths)
+        return NULL;
+
+    for (j = 0; paths[j] != NULL; j++)
+    {
+        path_cmd = malloc(strlen(paths[j]) + strlen(input) + 2); // +2 for '/' and null terminator
+        if (path_cmd == NULL)
+        {
+            perror("malloc");
+            exit(EXIT_FAILURE);
+        }
+
+        strcpy(path_cmd, paths[j]);
+        strcat(path_cmd, "/");
+        strcat(path_cmd, input);
+
+        if (access(path_cmd, F_OK | X_OK) == 0)
+        {
+            return path_cmd;
+        }
+        free(path_cmd);
+    }
+
+    return NULL;
+}
+
