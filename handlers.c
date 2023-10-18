@@ -3,19 +3,20 @@
 /************************ builtin_handler ************************/
 
 /**
- * handle_builtins - 
- * @builtin: 
- * Return: 
+ * builtin_handler - handles built-in commands
+ * @builtin: built-in command
+ * Return: the built-in associated function
+ *			that takes 'int' & 'char **' args & returns 'int'
  */
-int (*builtin_handler(const char *builtin))(char **)
+int (*builtin_handler(const char *builtin))(int, char **)
 {
 	builtin_t builtins[] = {
 		{"exit", __exit},
 		{"env", env},
-		{"setenv", _setenv},
-		{"unsetenv", _unsetenv},
-		/*{"cd", cd},
-		{"alias", alias},*/
+		{"setenv", __setenv},
+		{"unsetenv", __unsetenv},
+		{"cd", cd},
+		{"alias", alias},
 		{NULL, NULL}
 	};
 	int i;
@@ -24,6 +25,32 @@ int (*builtin_handler(const char *builtin))(char **)
 		if (!strcmp(builtin, builtins[i].builtin))
 			return (builtins[i].bf);
 	return (NULL);
+}
+/********************* variable_handler ****************************/
+
+/**
+ * variable_handler - handles the shell variables
+ * @cmdlv: commad_line variable
+ * Return: Nothing
+ */
+void variable_handler(__attribute__((unused)) char *cmdlv)
+{
+/*
+ *	char *value;
+ *
+ *	if (*cmdlv == '$')
+ *	{
+ *		if (!strcmp(cmdlv, "$?"))
+ *			something
+ *		else if (!strcmp(cmdlv, "$$"))
+ *			something
+ *		else
+ *		{
+ *			value = getenv(cmdlv + 1);
+ *			cmdlv = value;
+ *		}
+ *	}
+ */
 }
 
 /*********************** path_handler ******************************/
@@ -39,7 +66,9 @@ char *path_handler(char *cmde)
 	char *paths, *path;
 	int i;
 
-	paths = getenv("PATH");
+	path = getenv("PATH");
+	paths = malloc(strlen(path) + 1); /* need to be freed */
+	strcpy(paths, path);
 	if (!paths)
 		return (NULL);
 

@@ -20,13 +20,15 @@ void interactive_mode(void);
 void simple_mode(void);
 
 int execute(char *);
+int micro_execute(char *);
 
 /*************************     handlers      ****************************/
 
-int (*builtin_handler(const char *))(char **);
+int (*builtin_handler(const char *))(int, char **);
+void variable_handler(char *cmdlv);
 char *path_handler(char *);
 
-/************************* builtin_handler.c ****************************/
+/*************************  builtin_handler  ****************************/
 
 /**
  * struct builtin - Built-in structure
@@ -36,16 +38,21 @@ char *path_handler(char *);
 typedef struct builtin
 {
 	char *builtin;
-	int (*bf)(char **);
+	int (*bf)(int, char **);
 } builtin_t;
 
-int __exit(char **);
-int env(char **);
-int _setenv(char **);
-int _unsetenv(char **);
-int cd(char **);
-int alias(char **);
+int __exit(int, char **);
+int env(int, char **);
+int __setenv(int, char **);
+int __unsetenv(int, char **);
+int cd(int, char **);
+int alias(int, char **);
 
-/************************************************************************/
+/************************  crafted functions  ****************************/
+
+ssize_t _getline(char **, size_t *, FILE *);
+char *_strtok(char *, const char *);
+int _setenv(const char *, const char *, int);
+int _unsetenv(const char *);
 
 #endif /* SHELL_H */

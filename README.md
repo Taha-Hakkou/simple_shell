@@ -11,6 +11,7 @@ Simple UNIX command interpreter
 
 * If an executable cannot be found, print an error message and display the prompt again.
 * Handle errors.
+	** same output & error output as 'sh' (/bin/sh), except that errors should print program's name (argv[0])
 * You have to handle the “end of file” condition (Ctrl+D)
 
 * Handle command lines with arguments
@@ -58,29 +59,51 @@ Simple UNIX command interpreter
 
 * Handle comments (#)   (see example 15)
 
-* File as input
-	** Usage: simple_shell [filename]
-	** Your shell can take a file as a command line argument
-	** The file contains all the commands that your shell should run before exiting
-	** The file should contain one command per line
-	** In this mode, the shell should not print a prompt and should not read from stdin
+* Program usage:
+	* Interactive mode
+		** Usage: simple_shell
+		** ($) <command>	(exits using (ctrl+C), EOF(ctrl+D) or 'exit' builtin)
+	* Non-interactive mode
+		** Usage: echo <command> | simple_shell
+			  or: cat [filename] | simple_shell
+	* File as input
+		** Usage: simple_shell [filename]
+		** Your shell can take a file as a command line argument
+		** The file contains all the commands that your shell should run before exiting
+		** The file should contain one command per line
+		** In this mode, the shell should not print a prompt and should not read from stdin
 
 ## Project architecture :
 
 . simple_shell/
-	* README.md: readme file
-	* AUTHORS:
-	* compile.sh:
-	* hsh: 
+	* README.md: description of the project
+	* AUTHORS: list of contributors
+	* compile: compilation command executable
+	* hsh: simple_shell program
 	* Project files:
 		** shell.c: main program
 		** shell.h:
+		** modes.c:
+		** execute.c:
+		** handlers.c:
+		** builtin_functions.c:
+		** crafted functions:
+			*** _getline.c:
+			*** _strtok.c:
+			*** _setenv.c:
+			*** _unsetenv.c:
+
+## Allowed functions & syscalls:
+
+* (man 2): access - chdir - close - execve - _exit - fork - getpid - kill - open - read -
+		   signal - stat - write - lstat - fstat - wait - waitpid - wait3 - wait4
+* (man 3): closedir - exit - fflush - free - getcwd - getline - isatty - malloc - opendir -
+		   perror - readdir - strtok
 
 ## Requirements :
 
 * Betty Style
 * No memory leaks
-* No more than 5 functions per file
 * Header files should be include garded
 * Use syscalls just in need !
 
